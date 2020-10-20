@@ -96,6 +96,7 @@ CREATE TABLE IF NOT EXISTS tb_node (
 -- Table structure for tb_contract
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS tb_contract (
+  user_id int(11) NOT NULL  COMMENT '用户编号',
   contract_id int(11) NOT NULL AUTO_INCREMENT COMMENT '合约编号',
   contract_path varchar(24) binary NOT NULL COMMENT '合约所在目录',
   contract_name varchar(120) binary NOT NULL COMMENT '合约名称',
@@ -116,7 +117,7 @@ CREATE TABLE IF NOT EXISTS tb_contract (
   deploy_address varchar(64) DEFAULT NULL COMMENT '合约部署者地址',
   deploy_user_name varchar(64) DEFAULT NULL COMMENT '合约部署者用戶名',
   PRIMARY KEY (contract_id),
-  UNIQUE KEY uk_group_path_name (group_id,contract_path,contract_name,account)
+  UNIQUE KEY uk_group_path_name (user_id,group_id,contract_path,contract_name)
 ) ENGINE=InnoDB AUTO_INCREMENT=200001 DEFAULT CHARSET=utf8 COMMENT='合约表';
 
 

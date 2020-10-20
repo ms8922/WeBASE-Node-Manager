@@ -22,6 +22,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.webank.webase.node.mgr.user.entity.TbUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -94,6 +96,15 @@ public class ValidateCodeFilter implements Filter {
             throw new NodeMgrException(ConstantCode.INVALID_CHECK_CODE);
         }
     }
+
+
+    private TbUser checkToken(String token){
+
+        TbUser
+        return true;
+    }
+
+
 
 
 }

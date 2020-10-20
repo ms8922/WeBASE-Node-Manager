@@ -29,7 +29,7 @@ public interface ContractMapper {
 
     Integer add(TbContract tbContract);
 
-    Integer remove(@Param("contractId") Integer contractId);
+    Integer remove(@Param("userId") Integer userId,@Param("contractId") Integer contractId);
 
     Integer update(TbContract tbContract);
 
@@ -37,19 +37,19 @@ public interface ContractMapper {
 
     List<TbContract> listOfContract(ContractParam param);
 
-    TbContract queryByContractId(@Param("contractId") Integer contractId);
+    TbContract queryByContractId(@Param("userId") Integer userId,@Param("contractId") Integer contractId);
 
     TbContract queryContract(ContractParam queryParam);
 
-    List<TbContract> queryContractByBin(@Param("groupId") Integer groupId,
+    List<TbContract> queryContractByBin(@Param("userId") Integer userId,@Param("groupId") Integer groupId,
         @Param("contractBin") String contractBin);
 
-    String querySystemContractBin(@Param("groupId") Integer groupId,
+    String querySystemContractBin(@Param("userId") Integer userId,@Param("groupId") Integer groupId,
         @Param("contractName") String contractName);
 
-    void updateSystemContract(@Param("groupId") Integer groupId,
+    void updateSystemContract(@Param("userId") Integer userId,@Param("groupId") Integer groupId,
         @Param("contractName") String contractName, @Param("contractBin") String contractBin,
         @Param("contractAddress") String contractAddress);
 
-    void removeByGroupId(@Param("groupId") Integer groupId);
+    void removeByGroupId(@Param("userId") Integer userId,@Param("groupId") Integer groupId);
 }

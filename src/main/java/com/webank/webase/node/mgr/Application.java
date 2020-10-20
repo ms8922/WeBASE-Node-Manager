@@ -49,12 +49,15 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @EnableAsync
 @EnableScheduling
+@EnableSwagger2
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableAspectJAutoProxy(exposeProxy = true)

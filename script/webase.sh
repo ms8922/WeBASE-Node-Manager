@@ -13,9 +13,9 @@ if [[ ! $IP || ! $PORT ]] ; then
 fi
 
 #dbUser
-DBUSER="defaultAccount"
+DBUSER="root"
 #dbPass
-PASSWD="defaultPassword"
+PASSWD="root"
 #dbName
 DBNAME="webasenodemanager"
 

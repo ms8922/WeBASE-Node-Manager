@@ -22,11 +22,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaseQueryParam {
+public class BaseQueryParam extends BaseObject{
     private Integer start;
     private Integer pageSize;
     private String flagSortedByTime;
     public BaseQueryParam(Integer start,Integer pageSize){
+        super();
         this.start = start;
         this.pageSize = pageSize;
     }

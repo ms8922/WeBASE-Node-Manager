@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class TbContract {
-
+    private Integer userId;
     private Integer contractId;
     private String contractPath;
     private String contractVersion;
@@ -48,8 +48,9 @@ public class TbContract {
     /**
      * init by contractId、contractName、groupId、contractPath.
      */
-    public TbContract(Integer contractId, String contractName, Integer groupId) {
+    public TbContract(Integer userId,Integer contractId, String contractName, Integer groupId) {
         super();
+        this.userId=userId;
         this.contractId = contractId;
         this.contractName = contractName;
         this.groupId = groupId;
