@@ -69,9 +69,10 @@ public class AlertRuleService {
     }
 
     public TbAlertRule queryByRuleId(int ruleId) {
-        log.debug("start queryByRuleId ruleId:{}", ruleId);
+        log.info("---------------------------------------------------------");
+        log.info("start queryByRuleId ruleId:{}", ruleId);
         TbAlertRule resAlertRule = alertRuleMapper.queryByRuleId(ruleId);
-        log.debug("end resAlertRule:{}", resAlertRule);
+        log.info("end resAlertRule:{}", resAlertRule);
         return resAlertRule;
     }
 

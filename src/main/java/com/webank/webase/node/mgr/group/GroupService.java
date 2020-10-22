@@ -675,7 +675,7 @@ public class GroupService {
         //remove mapping.
         frontGroupMapService.removeByGroupId(groupId);
         //remove contract
-        contractService.deleteByGroupId(groupId);
+        contractService.deleteByGroupId(0,groupId);
         //remove method
         methodService.deleteByGroupId(groupId);
         //remove node

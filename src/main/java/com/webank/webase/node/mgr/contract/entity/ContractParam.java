@@ -16,16 +16,17 @@
 package com.webank.webase.node.mgr.contract.entity;
 
 import com.webank.webase.node.mgr.base.entity.BaseQueryParam;
+import com.webank.webase.node.mgr.token.TokenUserCache;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
-@NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class ContractParam extends BaseQueryParam {
+    private Integer userId;
     private Integer groupId;
     private Integer contractId;
     private String contractName;
@@ -38,11 +39,19 @@ public class ContractParam extends BaseQueryParam {
     private String partOfBytecodeBin;
     private String deployAddress;
 
+
+    public ContractParam() {
+        super();
+        this.userId=TokenUserCache.getUserId();
+    }
+
+
     /**
      * init by contractId.
      */
     public ContractParam(int contractId,int groupId) {
         super();
+        this.userId=TokenUserCache.getUserId();
         this.contractId = contractId;
         this.groupId = groupId;
     }
@@ -52,6 +61,8 @@ public class ContractParam extends BaseQueryParam {
      */
     public ContractParam(int groupId, String contractPath, String contractName, String account) {
         super();
+        this.userId=TokenUserCache.getUserId();
+        this.userId= TokenUserCache.getUserId();
         this.groupId = groupId;
         this.contractName = contractName;
         this.contractPath = contractPath;

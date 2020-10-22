@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.webank.webase.node.mgr.token.TokenUserCache;
 import org.apache.commons.lang3.StringUtils;
 import org.fisco.bcos.web3j.abi.datatypes.Address;
 import org.fisco.bcos.web3j.precompile.permission.PermissionInfo;
@@ -84,6 +85,7 @@ public class  ContractService {
     public TbContract saveContract(Contract contract) throws NodeMgrException {
         log.debug("start addContractInfo Contract:{}", JsonTools.toJSONString(contract));
         TbContract tbContract;
+        contract.setUserId(TokenUserCache.getUserId());
         if (contract.getContractId() == null) {
             tbContract = newContract(contract);//new
         } else {
@@ -143,7 +145,7 @@ public class  ContractService {
         // check contract id
         verifyContractNotDeploy(contractId, groupId);
         //remove
-        contractMapper.remove(contractId);
+        contractMapper.remove(TokenUserCache.getUserId(),contractId);
         log.debug("end deleteContract");
     }
 
@@ -167,6 +169,7 @@ public class  ContractService {
     public int countOfContract(ContractParam param) throws NodeMgrException {
         log.debug("start countOfContract ContractListParam:{}", JsonTools.toJSONString(param));
         try {
+            param.setUserId(TokenUserCache.getUserId());
             return contractMapper.countOfContract(param);
         } catch (RuntimeException ex) {
             log.error("fail countOfContract", ex);
@@ -180,7 +183,7 @@ public class  ContractService {
     public TbContract queryByContractId(Integer contractId) throws NodeMgrException {
         log.debug("start queryContract contractId:{}", contractId);
         try {
-            TbContract contractRow = contractMapper.queryByContractId(contractId);
+            TbContract contractRow = contractMapper.queryByContractId(TokenUserCache.getUserId(),contractId);
             log.debug("start queryContract contractId:{} contractRow:{}", contractId,
                 JsonTools.toJSONString(contractRow));
             return contractRow;
@@ -201,7 +204,7 @@ public class  ContractService {
             if (StringUtils.isEmpty(contractBin)) {
                 return null;
             }
-            List<TbContract> contractRow = contractMapper.queryContractByBin(groupId, contractBin);
+            List<TbContract> contractRow = contractMapper.queryContractByBin(TokenUserCache.getUserId(),groupId, contractBin);
             log.debug("start queryContractByBin:{}", contractBin, JsonTools.toJSONString(contractRow));
             return contractRow;
         } catch (RuntimeException ex) {
@@ -398,11 +401,11 @@ public class  ContractService {
     /**
      * delete by groupId
      */
-    public void deleteByGroupId(int groupId) {
+    public void deleteByGroupId(Integer userId,int groupId) {
         if (groupId == 0) {
             return;
         }
-        contractMapper.removeByGroupId(groupId);
+        contractMapper.removeByGroupId(userId,groupId);
     }
 
 

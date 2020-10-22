@@ -23,6 +23,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.webank.webase.node.mgr.node.entity.Node;
 import com.webank.webase.node.mgr.user.entity.TbUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ import com.webank.webase.node.mgr.base.tools.HttpRequestTools;
 import com.webank.webase.node.mgr.base.tools.NodeMgrTools;
 import com.webank.webase.node.mgr.token.TokenService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 
 /**
@@ -55,10 +58,12 @@ public class ValidateCodeFilter implements Filter {
      */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-        throws IOException, ServletException {
+            throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse rsp = (HttpServletResponse) response;
         String uri = HttpRequestTools.getUri(req);
+
+
         //is login
         if (LOGIN_URI.equalsIgnoreCase(uri) && LOGIN_METHOD.equalsIgnoreCase(req.getMethod())) {
             try {
@@ -70,6 +75,9 @@ public class ValidateCodeFilter implements Filter {
                 //remove token
                 tokenService.deleteToken(req.getHeader("token"), null);
             }
+        }else{
+            userCheck(req);
+
         }
         chain.doFilter(request, response);
     }
@@ -89,22 +97,59 @@ public class ValidateCodeFilter implements Filter {
         if (StringUtils.isBlank(tokenInHeard)) {
             throw new NodeMgrException(ConstantCode.INVALID_CHECK_CODE);
         }
+        TbUser user=checkToken(tokenInHeard);
+        request.setAttribute(tokenInHeard,user.getUserId());
         String code = tokenService.getValueFromToken(tokenInHeard);
         if (!codeInRequest.equalsIgnoreCase(code)) {
             log.warn("fail validateCode. realCheckCode:{} codeInRequest:{}", code,
-                codeInRequest);
+                    codeInRequest);
             throw new NodeMgrException(ConstantCode.INVALID_CHECK_CODE);
         }
     }
 
+    private void userCheck(HttpServletRequest req) {
 
-    private TbUser checkToken(String token){
+        String token =getToken(req);
 
-        TbUser
-        return true;
+        if (token==null){
+            return;
+        }
+
+        log.info("##########请求token {}",token);
+
+
+        if (StringUtils.isBlank(token)) {
+
+            return;
+        }
+        TbUser user=checkToken(token);
+        req.setAttribute(token,user.getUserId());
+
+        log.info("##########添加缓存{} 用户 {}",token,user.getUserId());
+
     }
 
 
+    public  TbUser checkToken(String token){
+        TbUser user=new TbUser();
+        user.setUserId(22222);
+        return user;
+    }
+
+
+    public  String getToken(HttpServletRequest request) {
+
+        String header = request.getHeader(NodeMgrTools.TOKEN_HEADER_NAME);
+        if (StringUtils.isBlank(header)) {
+            return null;
+        }
+
+        String token = StringUtils.removeStart(header, "Token").trim();
+        if (StringUtils.isBlank(token)) {
+            return null;
+        }
+        return token;
+    }
 
 
 }

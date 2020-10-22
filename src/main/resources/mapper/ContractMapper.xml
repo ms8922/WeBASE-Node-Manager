@@ -155,6 +155,7 @@
   <select id="listOfContract" parameterType="com.webank.webase.node.mgr.contract.entity.ContractParam"
     resultMap="contractMap">
     select * from tb_contract where 1=1
+    and user_id=#{userId}
     <if test="contractId != null and contractId != ''">
       and contract_id = #{contractId}
     </if>
@@ -185,7 +186,6 @@
     <if test="start != null and pageSize != null">
       limit #{start},#{pageSize}
     </if>
-      and user_id=#{userId}
   </select>
 
   <select id="queryByContractId" parameterType="com.webank.webase.node.mgr.contract.entity.ContractParam" resultMap="contractMap">

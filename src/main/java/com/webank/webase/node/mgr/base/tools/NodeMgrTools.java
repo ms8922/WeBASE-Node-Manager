@@ -51,6 +51,8 @@ import com.webank.webase.node.mgr.base.exception.NodeMgrException;
 import com.webank.webase.node.mgr.base.tools.pagetools.entity.MapHandle;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * common method.
@@ -437,11 +439,24 @@ public class NodeMgrTools {
         }
     }
 
+    /**
+     * get token.
+     */
+    public static synchronized String getToken() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest req = attributes.getRequest();
+
+        return getToken(req);
+    }
+
+
+
 
     /**
      * get token.
      */
     public static synchronized String getToken(HttpServletRequest request) {
+
         String header = request.getHeader(TOKEN_HEADER_NAME);
         if (StringUtils.isBlank(header)) {
             log.error("not found token");
