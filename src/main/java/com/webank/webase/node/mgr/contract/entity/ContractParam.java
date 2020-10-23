@@ -44,8 +44,6 @@ public class ContractParam extends BaseQueryParam {
         super();
         this.userId=TokenUserCache.getUserId();
     }
-
-
     /**
      * init by contractId.
      */

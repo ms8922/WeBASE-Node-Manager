@@ -102,7 +102,6 @@
     <if test="deployUserName != null and deployUserName != ''">
       ,deploy_user_name = #{deployUserName}
     </if>
-    where contract_id = #{contractId}
     where user_id=#{userId} and contract_id = #{contractId}
   </update>
 
@@ -118,6 +117,9 @@
   <select id="countOfContract" parameterType="com.webank.webase.node.mgr.contract.entity.ContractParam"
     resultType="java.lang.Integer">
     select count(1) from tb_contract where 1=1
+    <if test="contractId != null and contractId != ''">
+      and user_id = #{UserId}
+    </if>
     <if test="contractId != null and contractId != ''">
       and contract_id = #{contractId}
     </if>
@@ -148,7 +150,6 @@
     <if test="deployAddress != null and deployAddress != ''">
       and deploy_address = #{deployAddress}
     </if>
-      and user_id=#{userId}
   </select>
 
 

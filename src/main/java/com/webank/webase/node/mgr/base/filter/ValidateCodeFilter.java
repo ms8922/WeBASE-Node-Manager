@@ -14,6 +14,7 @@
 package com.webank.webase.node.mgr.base.filter;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -23,9 +24,12 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.webank.webase.node.mgr.account.AccountService;
+import com.webank.webase.node.mgr.account.entity.TbAccountInfo;
 import com.webank.webase.node.mgr.node.entity.Node;
 import com.webank.webase.node.mgr.user.entity.TbUser;
 import org.apache.commons.lang3.StringUtils;
+import org.fisco.bcos.web3j.utils.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -49,6 +53,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class ValidateCodeFilter implements Filter {
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private AccountService accountService;
     @Autowired
     private static final String LOGIN_URI = "/account/login";
     private static final String LOGIN_METHOD = "post";
@@ -97,8 +103,7 @@ public class ValidateCodeFilter implements Filter {
         if (StringUtils.isBlank(tokenInHeard)) {
             throw new NodeMgrException(ConstantCode.INVALID_CHECK_CODE);
         }
-        TbUser user=checkToken(tokenInHeard);
-        request.setAttribute(tokenInHeard,user.getUserId());
+        userCheck(request);
         String code = tokenService.getValueFromToken(tokenInHeard);
         if (!codeInRequest.equalsIgnoreCase(code)) {
             log.warn("fail validateCode. realCheckCode:{} codeInRequest:{}", code,
@@ -122,19 +127,24 @@ public class ValidateCodeFilter implements Filter {
 
             return;
         }
-        TbUser user=checkToken(token);
-        req.setAttribute(token,user.getUserId());
+        Integer bi=checkToken(token);
+        req.setAttribute(token,(Integer)bi);
 
-        log.info("##########添加缓存{} 用户 {}",token,user.getUserId());
+        log.info("##########添加缓存{} 用户 {}",token,bi);
 
     }
 
 
-    public  TbUser checkToken(String token){
-        TbUser user=new TbUser();
-        user.setUserId(22222);
-        return user;
+    public  Integer checkToken(String token){
+        String userName=tokenService.getValueFromToken(token);
+
+        BigInteger bi = new BigInteger(userName.getBytes());
+
+        return bi.intValue();
     }
+
+
+
 
 
     public  String getToken(HttpServletRequest request) {

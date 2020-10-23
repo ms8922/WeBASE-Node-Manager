@@ -50,14 +50,17 @@ public class TokenUserCache {
 
     public static Integer getUserId(){
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest req = attributes.getRequest();
+        if (attributes!=null) {
+            HttpServletRequest req = attributes.getRequest();
 
-        String token =NodeMgrTools.getToken(req);
-       Object userid= req.getAttribute(token);
+            String token = NodeMgrTools.getToken(req);
+            Object userid = req.getAttribute(token);
 
 
-        log.info("##########获取缓存{} 用户 {}",token,userid);
-        return  (Integer)userid;
+            log.info("##########获取缓存{} 用户 {}", token, userid);
+            return (Integer) userid;
+        }
+        return 0;
 
     }
 

@@ -169,7 +169,6 @@ public class  ContractService {
     public int countOfContract(ContractParam param) throws NodeMgrException {
         log.debug("start countOfContract ContractListParam:{}", JsonTools.toJSONString(param));
         try {
-            param.setUserId(TokenUserCache.getUserId());
             return contractMapper.countOfContract(param);
         } catch (RuntimeException ex) {
             log.error("fail countOfContract", ex);
@@ -262,6 +261,7 @@ public class  ContractService {
         //save contract
         TbContract tbContract = new TbContract();
         BeanUtils.copyProperties(inputParam, tbContract);
+        tbContract.setUserId(TokenUserCache.getUserId());
         tbContract.setDeployAddress(inputParam.getUser());
         tbContract.setDeployUserName(userName);
         tbContract.setContractAddress(contractAddress);
